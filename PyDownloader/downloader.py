@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import *
+
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
 
 import sys
 import urllib.request
@@ -19,9 +20,11 @@ class PyDownloader(QDialog):
         self.progress.setValue(0)
         self.progress.setAlignment(Qt.AlignHCenter)
         download = QPushButton("Download")
+        browse = QPushButton("Browse")
 
         layout.addWidget(self.url,            0, 0)
         layout.addWidget(self.save_location,  1, 0)
+        layout.addWidget(browse,              1, 1)
         layout.addWidget(download,            2, 0)
         layout.addWidget(self.progress,            2, 1)
 
@@ -30,6 +33,13 @@ class PyDownloader(QDialog):
         self.setFocus()
 
         download.clicked.connect(self.download)
+        browse.clicked.connect(self.browse_file)
+
+    def browse_file(self):
+       # save_file = QFileDialog.getSaveFileName(self, caption="Save File As", directory=".", filter="All Files (*.*)")
+        save_file, _ = QFileDialog.getSaveFileName(self, caption="Save", directory=".", filter="All Files (*.*)")
+        print(str(save_file))
+        self.save_location.setText(QDir.toNativeSeparators(save_file))
 
     def download(self):
         url = self.url.text()
